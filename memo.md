@@ -1,0 +1,2 @@
+039:props.childrenの用途とクラスの継承方法は大事なので覚えておくこと。
+041:React dependency(json file)があるからJSXコードを可能にしているが、このdependencyが無い場合でそのままjacascriptのルールに沿って記載する場合の例は、参照しておいた方が良い。
