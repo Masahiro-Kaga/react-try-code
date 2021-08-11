@@ -16,3 +16,5 @@ Start:(App.jsのメモ書きをここへ移動)
         max-width: 100%;
     勉強ポイントは、(html)divは場合によってはたくさん使っていい。min,max,step,(css)flex-wrap,text-alignの適用方法,max-widthとwidthの使い方。
 
+053:useStateでデータ更新
+    ・event.target.valueで得られるデータはストリング（文字列）、そのためuseState("")としてデータタイプを最初はあわせなければならない。
