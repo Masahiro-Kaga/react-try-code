@@ -6,3 +6,36 @@
     setExpense([expense,...DUMMY_EXPENSES])
     };
 
+066
+　３通りのコンディションによる記載方法がある。
+
+　①　ifの省略形
+    {filteredExpenses.length === 0 ? (
+          <p>no Expense</p>
+        ) : (
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))
+        )}
+
+
+　②　&&を使う
+    {filteredExpenses.length === 0 && <p>no Expense</p>}
+        {filteredExpenses.length > 0 &&
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))}
+
+
+　③　解答参照
+
