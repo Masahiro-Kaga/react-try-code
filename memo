@@ -1,0 +1,8 @@
+064
+　次の書き方がシンプルだが、今回は違う書き方を学ぶ。
+
+    const [expenses,setExpense] = useState(DUMMY_EXPENSES);
+    const addExpenseHandler = (expense) => {
+    setExpense([expense,...DUMMY_EXPENSES])
+    };
+
