@@ -6,11 +6,21 @@
 
 075
 　クラスの設定方法
-    CourseInput.jsにて、コラム28 29
+    CourseInput.jsにて、コラム28 29 30
     二つのクラスを設定する場合、
     <div className={"form-control invalid"}>というように、カーリーブレイスで囲む必要がある。
 
     テンプレートリテラルを使うことも可能。今回はこのケースでDONE。
 
+076
+　Styled Component。
 
+　例えばbuttonとかにクラスを設定した場合で違うCSSを適用したい場合、親にCSSで"button"という名前のクラスを設定すると子にもそのCSSが適用されてしまう。それを防ぐのがStyled Component。
+　→色んなタグで使い回しができ、それぞれのタグで「クラス名＋それぞれ違う識別クラス名」が自動で付されるため。
 
+　CSSファイルではなくて、JSファイル（コンポーネントとして）でスタイルを設定する。
+　事前にプロジェクトごとにnpm install --save styled-componentsをインストールする必要がある。
+　
+　styled componentは、そのままだとバッククオート間のスタイルのセレクタ、プロパティ及びプロパティの値の色がオレンジ一色でわかりにくいので、vscode-styled-componentという拡張機能を入れること。
+
+　このコンポーネントはStyled Componentなので、Reactをインポートする必要がないから削除。
