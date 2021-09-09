@@ -43,9 +43,10 @@
 078
 　min-widthがどのような作用があるのか迷ったら、”min-widthはレスポンシブ（スマホ）最優先型cssに適用する”と覚えておくとよい。だから、mediaクエリの中には、モバイル以上の幅になったときに適用するスタイルだとわかる。
 　
-　buttonは標準でdisplay：inlineなので、左に寄る。かつwidth:autoのため、文字＋適当なpadding(marginじゃない)が付く。
+　buttonは標準でdisplay：inlineなので、左に寄る。かつ標準ではwidth:autoのため、100％と異なり、文字＋適当なpadding(marginじゃない)が付く。
+　width:autoはpaddingとmarginの影響を受けることに注意。
 　
-　widthのautoと100％の違いはこちら。
+　詳細・その他の、widthのautoと100％の違いはこちら。
 　https://yu-z.com/100-or-auto-width/
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
@@ -53,3 +54,10 @@
 　CSS module。超楽、Styled Componentよりはるかに楽。
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
+080
+　CSS module advance usage.
+　ハイフン付きのクラス名は記載方法に注意。３通りある。
+　１　{styles[form-control']}
+　２　{`${styles['form-control']}`}
+　ただし、！！！！！二つ目の方が、クラスが複数ある場合は有効！！！！！！
+　３　ハイフンを除いたクラス名に置き換える
