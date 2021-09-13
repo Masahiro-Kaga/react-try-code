@@ -30,4 +30,8 @@
 　マックスコードのCSSのミソは、inputクラスのwidth（%設定）/max-width（実寸設定）の同時設定、inputの子inputのdisplay設定（inlineからの）。
 
 
+091
+　buttonのタイプ、親のプロパティで指定されていなければ子で指定、という技を習得すべし。
+
+
 
