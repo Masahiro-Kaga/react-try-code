@@ -1,5 +1,33 @@
 089
 　UIとAddUserコンポーネント追加。Formとファンクションも必要。
 
+090
+　Cardコンポーネント作成、cssも。
+　AddUser.module.cssはダウンロード。でも自分で作成した方が良い。
+　
+　Cardコンポーネントに二つのクラスを適用させる。一つはこのコンポーネント独自のもの、もう一つは親コンポーネントから引っ張ってきた（propsで）もの。
+　その際、テンプレートリテラルを使用してクラス名を設定すること。
+
+　CSSは以下でも同じような結果。
+　{AddUser}
+　.input{
+    margin:2rem auto;
+    padding:20px;
+　}
+　.form{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+　}
+
+ {Card}
+　.card{
+    background-color:white;
+    width:50%;
+    border-radius:10px;
+　}
+
+　マックスコードのCSSのミソは、inputクラスのwidth（%設定）/max-width（実寸設定）の同時設定、inputの子inputのdisplay設定（inlineからの）。
+
 
 
