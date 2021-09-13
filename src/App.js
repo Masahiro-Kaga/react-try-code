@@ -1,11 +1,14 @@
-import './App.css';
+import React from 'react';
+
 import AddUser from './components/Users/AddUser';
+import UsersList from './components/Users/UsersList';
 
 function App() {
   return (
-    <AddUser>
-      <h2>let's get started</h2>
-    </AddUser>
+    <div>
+      <AddUser />
+      <UsersList users={[]} />
+    </div>
   );
 }
 
