@@ -52,3 +52,24 @@
 　mapを使って、データをリフトする。
 　データの積み上げ方法をしっかり学習する。
 
+096
+　error modalを作成。この回は常にmodalを全面に表示させるのみで良い。
+　UIフォルダに作成して、親の方で必要なプロパティ、propsを設定。
+　z-indexの設定により一番前に来るようにする。
+
+　overflowがなければ、ボーダーの丸みが出ないので注意。
+　https://saruwakakun.com/html-css/basic/overflow
+
+　Cardコンポーネント以下のErrorModalの子要素の配置方法がミソ。
+
+　ErrorModalコンポーネントはUIなので、スタイルだけ決めている。よって、エラーメッセージとかタイトルとかは、基本親のプロパティで設定していることにも注目。
+
+　以下のコードはカードを中央揃えするためのもの？
+　@media (min-width: 768px) {
+  .modal {
+    left: calc(50% - 20rem);
+    width: 40rem;
+  }
+}
+　https://webabc.hatenablog.jp/entry/2020/12/24/calc-centering
+　https://coliss.com/articles/build-websites/operation/css/calc-function-with-use-cases.html
