@@ -73,3 +73,8 @@
 }
 　https://webabc.hatenablog.jp/entry/2020/12/24/calc-centering
 　https://coliss.com/articles/build-websites/operation/css/calc-function-with-use-cases.html
+
+
+097
+　ボタンやモダルをクリックしたら、falseやtrueをその子コンポーネントから親に送る（liftup）という方法もある。
+　が、この例では、ただ親のファンクションを発動するのみ。かつtrue/falseを直接用いるのではなくて、titleとメッセージをuseStateを用いて変数に代入することで、その変数の中にtitle/messageが入っていたら真を返し、それ以外は偽を返すという処理をしている。効率化を図っている。
