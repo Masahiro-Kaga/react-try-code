@@ -1,0 +1,210 @@
+110
+
+　useEffectの挙動＝２つ目の因数が[空欄]だったら、ただ、画面が開かれたりリフレッシュした時だけその中のファンクションとかが発動する。useStateとかでコンポーネント全体が読み込まれる際も、useEffectの中のファンクションとかは発動しない。
+
+  １　ローカルストレージの設定・呼出・削除方法。
+
+　設定するには、
+  localStorage.setItem('isLoggedIn'(key),'1'(value))
+  ウェブブラウザのinspection -> Application -> Storage -> localStorage　に、データが格納されていることがわかる。
+
+  呼び出して変数に代入するには、
+　const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn')
+
+  削除するには、
+  localStorage.removeItem('isLoggedIn')
+
+　２ useEffectの使い方。
+　
+　ページをリフレッシュした時に、ログイン状態（localStrageの値が真（1））だったら、ログイン画面をリフレッシュ前同様に表示させるのが目的。
+
+  infinite loopを避けなければいけないことに注意。
+　useEffectファンクションのdependencyがあるのとないのとで、挙動の違いを覚えておく。
+
+
+　111
+ 
+  dependencyが変化した場合に、useEffect内のファンクションが発動するようにする。
+  Login.jsコンポーネントにて。
+
+
+  113
+
+  キーストロークするたびにコンポーネントを更新するのは効率が悪いので、setTimeoutとuseEffectを利用して、キーストロークが終わって０.５秒の後にバリデーションを発動させる。
+
+  setTimeoutは、指定した時間に到達して一度だけ、発動されるもの。繰り返し発動するsetIntervalとは違うので注意。
+
+  returnの後に値ではなく、　()=>{}　を入れると、通常のリターン時に値を返すのではなく、ファンクションなどを発動するという挙動になる。
+
+　useEffect内でreturnを使った場合、dependencyの変数に変化が加えられて初めて発動するもの。
+　よって、今回のuseEffectの挙動は、
+　(ページ読込) -> SetTimeout -> (文字入力) -> 変数変更　-> clearTimeout -> SetTimeout -> の繰り返し。
+　素早く文字入力すれば、setTimeoutが0.5秒たたないうちにclearTimeoutでファンクションがクリアされる。
+　次の項のコードの方が挙動がわかりやすいので、理解するには次の項を参考のこと。
+
+
+114
+
+　useEffectの第二引数にenteredEmailを入れたバージョンでも挙動を確認すると理解しやすい。
+  結局、returnの後は、コンポーネントがuseStateなどで更新された際に発動されるもの。
+  
+
+115-117_1
+
+  useReducer実践。
+
+  共通したstateの変数を使っているかどうかによって、reducerが使えるかどうか判断。¸
+　今回の場合は、setEnteredEmailはstateの変数を更新、かつsetEmailIsvalidで上記state変数を用いてvalid判定する
+
+　順序としては、
+    １　reducerの式をコンポーネントの中に作る（それぞれの引数や変数の名前を定義する、かつ、必要なstateの形、例えば変数一個かオブジェクトか配列か、そしてその初期値の設定）。
+    ２　reducerの第一引数のファンクションを、コンポーネント外に定義。どのような値をstateに返したいのか。Typeには、dispatchを発動させるためのアクションの種類を名前に設定する。例えば、Userがインプットする時、typeは’USER_INPUT’にする、等。
+    ３　dispatchファンクションを設定。第一引数に引き金となるタイプを設定。その後の引数には、reducerで新しいデータを使ってstateを更新するために必要な新変数を設定。
+    　　dispatchファンクションを発動するためのファンクションを設定する必要あり。
+     　　  const somethingChangeHandler = (event) => {
+            dispatchEmail({type:'INPUT_EMAIL' , value:event.target.value});
+          };
+
+    ミソは、dispatchで送られてくるデータとreducerの第一引数が連動するということをいつも意識すること。
+
+　reducerのテンプレ
+   const [state,dispatch Function] = useReducer(reducer Function, initialState, (inital Function));
+　
+　useReducerについて。
+    第二引数はファンクションでなければならない。かつ、コンポーネントの外に変数で定義しておく方が良い。区別した方がコードと挙動が分析しやすい。そして、必ずreturnでstateを返すようにする。
+    さらにこのファンクションの第一引数には現在のstate、第二引数にはdispatch Functionの引数の値が入る。
+      const dispatchReducer = (state【現在のstate】, action【下でリターンされるstate】) => {
+        if (action.type === "USER_INPUT") {
+          return { value: action.val, isValid: action.val.trim().length > 6 };
+        }
+      
+      ⇩
+
+      const passwordChangeHandler = (event) => {
+        dispatchFunction({ type: "USER_INPUT", val: event.target.value });　【←これが上のactionに入る】
+      };
+        
+
+117_2(118に英語のディスクリプションにて解説あり。多分、見てる人から説明足りないとクレームあったのか。)
+
+  useEffectを復活させるが、Dependencyに注目。
+  ビデオでは、初期段階では
+  
+  [emailState, passwordState])
+  
+  を設定している。
+  これは、stateの中のvalueかisValidどちらかでも変更が加えられればuseEffectが働く事になる。
+  valueはユーザーが入力する度に変更が加わるが、useEffectでは入力内容がvalid若しくはinvalidになった時だけuseEffectが発動すれば良いので、
+  
+  [emailState.isValid, passwordState.isValid])
+
+  とすることで、useEffectが無駄に発動しまくることを防ぐことができる。
+
+  しかし、別の技・参考として、ビデオでは「オブジェクトのエイリアス」というJS機能を使っている。
+  つまり、下の場合は、emailIsValidという変数に、emailState.isValidを代入しているという意味になる。
+
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
+　[emailIsValid, passwordIsValid]);
+
+
+121
+
+  useContextの使い方。
+
+  通常、他のコンポーネントから変数を持ってくる場合はpropsを使うが、createContextを使うことでprops chain/props soupが必要なくなる。
+
+  手順とそれぞれの役割
+    AuthContext -> コンテクストの型を作り（＋初期値の設定）、かつベース基地となる。変数等をここに吸い上げて、コンポーネントに送る。
+    Provider -> そのコンポーネント内で得られる変数を上のベース基地に送り込む
+    Consumer -> ベース基地から変数を拝借する
+
+  この項では、isLoggedInがApp -> MainHeader -> Navigationとチェーンになっているので、useContextを使ってシンプルにしている。
+  よって、仲介しているMainHeaderのプロパティは削除。
+
+  providerの鍵かっこが二重になっていることに注意（一つ目はJSX、もう一つはオブジェクトとしてそれぞれ認識させるためのもの）
+
+
+122
+
+  Consumerをもっと簡単な形に変える。
+　　
+
+123
+
+  contextは、functionにも使える。
+
+  NavigationのonLogoutは、同じくMainHeaderコンポーネントを介して、Appコンポーネントから引っ張ってきている。
+  よって、AppとMainHeaderのprops chainを削除して、AppのProviderに送りたいファンクションを追加、Navigationでpropsからctxに変える。
+
+  （auth-context.jsの初期値にファンクションは加えるのは次の項で。）
+
+  Contextを使わずpropsを使った方が良いケース
+  １　リンクさせたいコンポーネントがそれぞれ直接親と子で繋がっている。
+  ２　ButtonとかInputとか、一般的にspecificではなく色んなところで色んな使い方をされるものには使わない方が良い。今回のケースの場合、Buttonコンポーネント本体の中にコンテクストを入れると、Buttonの使い回しをしようとした際に、全てのButtonコンポーネントが同じコンテクストを参照してしまって、機能としてログアウトならログアウトしかできなくなってしまうということ。
+
+
+124
+
+  A ファンクションの初期値としての設定
+
+  auth-context.jsの初期値にファンクションを加えても加えなくても動作するが、vsCodeのオートコンプリーションを起動させるという意味で、ダミーとして空のファンクションを入力しておいた方がhelpful。
+
+  B （難易度高め）全てのコンポーネントでcontextを使用できるようにするには
+
+  結論としては、全てのルートコンポーネントだった<App>の上に、さらにルートコンポーネントとして、コンテキスト専用コンポーネントを設置する。
+
+    1 ベースのコンテキストコンポーネント（React.createContext）に、共用したいコンテキスト変数やファンクション（およびそれらの初期値）を入れる。
+    2 同じファイルに、新たにコンポーネントを作る。その中には、後にProviderとして共用したい変数やファンクションの挙動を設定する。
+    3 同じファイルに、次はリターン値を設定する。この中には、Providerを作って、上記2の変数やファンクションとリンクするvalueを設定する。そして、Providerのタグ同士の中に、props.children を入れる。
+    → 以上、全て同じファイル内で①コンテキストのベースと初期値設定、②使用する変数とファンクションの設定、③Providerより下階層全てにコンテキストを共用させるための処理。
+     　をいっぺんに設定している。
+
+    4 index.jsのAppコンポーネントを、上記で作成したコンポーネントで囲む。
+    5 あとは、propsで処理されているコンポーネント（特にprops soup化しているもの）で、必要なものをcontextに置き換える。
+
+    
+125
+
+　Hookのルール説明。
+　コンポーネントの一番上に設定しなければダメ。ネストされていたりしたらダメ。
+　あとは、useeffectのルールとして、中の変数は全てdependencyとして設定すること。
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      setFormIsValid(emailIsValid && passwordIsValid);
+  ・・・・・
+  }, [emailIsValid, passwordIsValid]);
+
+　この場合、emailIsValid, passwordIsValidどちらか一方でも欠けていたら警告が出る。若しくはどちらも削除する必要がある。
+　なお、identifierはuseeffectの中で初めて設定した変数なので関係ない。
+
+    
+127
+
+  inputの部分をUIコンポーネントとして作成する。
+
+  １　はじめに、どこからどこまでがUIのインプット部分なのかを見極める。
+  ２　Inputコンポーネントとcssモジュールを作る。インポートやエクスポート作業も忘れずに。
+  ３　Inputコンポーネントで設定すべきプロパティがどれか（親コンポーネントにて設定すべきプロパティ）、一覧を作成する。
+  　　例えば、typeとかvalue、id、htmlForなど。クリックや入力によって動作させるためのファンクションも設定できる、onChangeとかonClickなど。
+  ４　クラスは、Inputコンポーネント独自のものの他に、親で設定できるものを設定すべき（props.className）。
+      今回のケースはそれが無いが、Buttonコンポーネントには設定されている。
+      また、今回は親が持つ変数の状態(false or true)によってInputのクラスを操作するというトリックを採用しているので注目。
+
+
+128
+
+  useRefの応用編。の前に、おさらいが少しだけ。
+　Inputコンポーネントで、useEffectを使って（dependencyは設定しない、つまりページリフレッシュした際のみの挙動）、useRefを設定したタグにカーソルがあたるようにする（フォーカス）。
+
+　inputタグにカーソルがあたるようにしたいが、inputが二つあるので、挙動としては、passwordにカーソルが当たる。なぜなら、レンダリングの順番がemailの次にpasswordが来るから。
+
+　次に本番。useEffect関連を削除、ただのおさらいだったから。
+
+　やりたいこととして、emailがfalseだったら、emailに、emailがtrueだけどpasswordがfalseだったらpasswordに、それぞれカーソルを持っていくというもの。
+
+　Loginコンポーネントより、disabledプロパティを削除して、常にボタンをアクティブにする。なお、disabledプロパティは（Buttonコンポーネントを見ればわかるが）独自にユーザが設定したものではなくて、そもそもhtmlにあるもの。
+
+　ビデオは、途中まで間違いの例を示している。
