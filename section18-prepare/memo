@@ -1,0 +1,13 @@
+229
+
+npm init -y (その後の回答に全てYesと言う意味)
+    package.jsonができる。
+
+npm install redux
+    package-lock.jsonができる。
+    package.jsonのdependencyの中にreduxが追加される。
+
+
+230
+
+node redux-demo.js　で、コードを走らせる。
