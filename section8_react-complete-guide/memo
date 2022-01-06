@@ -1,0 +1,80 @@
+089
+　UIとAddUserコンポーネント追加。Formとファンクションも必要。
+
+090
+　Cardコンポーネント作成、cssも。
+　AddUser.module.cssはダウンロード。でも自分で作成した方が良い。
+　
+　Cardコンポーネントに二つのクラスを適用させる。一つはこのコンポーネント独自のもの、もう一つは親コンポーネントから引っ張ってきた（propsで）もの。
+　その際、テンプレートリテラルを使用してクラス名を設定すること。
+
+　CSSは以下でも同じような結果。
+　{AddUser}
+　.input{
+    margin:2rem auto;
+    padding:20px;
+　}
+　.form{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+　}
+
+ {Card}
+　.card{
+    background-color:white;
+    width:50%;
+    border-radius:10px;
+　}
+
+　マックスコードのCSSのミソは、inputクラスのwidth（%設定）/max-width（実寸設定）の同時設定、inputの子inputのdisplay設定（inlineからの）。
+
+
+091
+　buttonのタイプ、親のプロパティで指定されていなければ子で指定、という技を習得すべし。
+
+092
+　useState使用。onChangeで変更を更新して、最終的にボタンでコンソール出す。
+
+093
+　submit後のinput欄クリアとバリデーション{名前が空欄ではない、または、年齢の数字がネガティブではない}設定。
+　2way bindingを適用させてクリアを実現する。
+
+　ageがもしナンバーではなくて文字列が入力されたら（もしくはプログラム的に文字として認識される変数であれば）、その文字を数字に変えなければならないが、簡単な方法がレクチャで紹介されているので注目。
+　
+094
+　リストの作成準備。
+　UsersListコンポーネントおよびCSSを作成。Appコンポーネントでインポート。
+　ここで、入力されたデータをアップリフトして、UsersListでそのデータを使用するという流れ。
+　アップリフトは次の項にて。ここでは、リストをhtmlで表示するよう土台作るのみ。親には空のオブジェクト配列を仮に入れておく。
+
+095
+　mapを使って、データをリフトする。
+　データの積み上げ方法をしっかり学習する。
+
+096
+　error modalを作成。この回は常にmodalを全面に表示させるのみで良い。
+　UIフォルダに作成して、親の方で必要なプロパティ、propsを設定。
+　z-indexの設定により一番前に来るようにする。
+
+　overflowがなければ、ボーダーの丸みが出ないので注意。
+　https://saruwakakun.com/html-css/basic/overflow
+
+　Cardコンポーネント以下のErrorModalの子要素の配置方法がミソ。
+
+　ErrorModalコンポーネントはUIなので、スタイルだけ決めている。よって、エラーメッセージとかタイトルとかは、基本親のプロパティで設定していることにも注目。
+
+　以下のコードはカードを中央揃えするためのもの？
+　@media (min-width: 768px) {
+  .modal {
+    left: calc(50% - 20rem);
+    width: 40rem;
+  }
+}
+　https://webabc.hatenablog.jp/entry/2020/12/24/calc-centering
+　https://coliss.com/articles/build-websites/operation/css/calc-function-with-use-cases.html
+
+
+097
+　ボタンやモダルをクリックしたら、falseやtrueをその子コンポーネントから親に送る（liftup）という方法もある。
+　が、この例では、ただ親のファンクションを発動するのみ。かつtrue/falseを直接用いるのではなくて、titleとメッセージをuseStateを用いて変数に代入することで、その変数の中にtitle/messageが入っていたら真を返し、それ以外は偽を返すという処理をしている。効率化を図っている。
