@@ -1,0 +1,48 @@
+064
+　次の書き方がシンプルだが、今回は違う書き方を学ぶ。
+
+    const [expenses,setExpense] = useState(DUMMY_EXPENSES);
+    const addExpenseHandler = (expense) => {
+    setExpense([expense,...DUMMY_EXPENSES])
+    };
+
+066
+　３通りのコンディションによる記載方法がある。
+
+　①　ifの省略形
+    {filteredExpenses.length === 0 ? (
+          <p>no Expense</p>
+        ) : (
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))
+        )}
+
+
+　②　&&を使う
+    {filteredExpenses.length === 0 && <p>no Expense</p>}
+        {filteredExpenses.length > 0 &&
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))}
+
+
+　③　解答参照
+
+068-069-070
+
+069
+　cssをインラインで書く場合の方法→２通りあるので注意。さらに、ダブルカーリーブレイスである必要あり。
+　6:30くらいを参照。
+  style={{backgroundColor : 'red'}}
+  style={{'background-color' : 'red'}}
